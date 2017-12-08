@@ -9434,141 +9434,15 @@ function transform(node) {
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
+var _display = __webpack_require__(471);
 
-var _d = __webpack_require__(172);
+var _display2 = _interopRequireDefault(_display);
 
-var d3 = _interopRequireWildcard(_d);
-
-var _better_life = __webpack_require__(463);
-
-var _better_life2 = _interopRequireDefault(_better_life);
-
-var _health_spending = __webpack_require__(464);
-
-var _health_spending2 = _interopRequireDefault(_health_spending);
-
-var _education = __webpack_require__(465);
-
-var _education2 = _interopRequireDefault(_education);
-
-var _population = __webpack_require__(466);
-
-var _population2 = _interopRequireDefault(_population);
-
-var _GDP = __webpack_require__(467);
-
-var _GDP2 = _interopRequireDefault(_GDP);
-
-var _set = __webpack_require__(468);
-
-var _set2 = _interopRequireDefault(_set);
+var _graph = __webpack_require__(472);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-var Display = function Display(input) {
-    var dataset = void 0;
-
-    switch (input) {
-        case "quality of life":
-            dataset = _better_life2.default;
-            break;
-        case "health":
-            selected = "h";
-            break;
-        case "education":
-            selected = "e";
-            break;
-
-    }
-
-    var svg = d3.select("body").append("svg").attr("width", 1400).attr("height", 700);
-
-    var w = 1400;
-    var h = 700;
-    var xPadding = 60;
-    var yPadding = 30;
-
-    // setting up xScale, yScale, and rScale 
-    // horizontal scale 
-    var xScale = d3.scaleLinear().domain([d3.min(dataset[3], function (d) {
-        return d;
-    }), d3.max(dataset[3], function (d) {
-        return d;
-    })]).range([xPadding, w - xPadding]);
-
-    // vertical scale 
-    var yScale = d3.scaleLinear().domain([d3.min(dataset[0], function (d) {
-        return d;
-    }), d3.max(dataset[0], function (d) {
-        return d;
-    })]).range([h - yPadding, yPadding]);
-
-    // radius scale 
-
-    var rScale = d3.scaleLinear().domain([d3.min(countriesGDPArr, function (d) {
-        return d;
-    }), d3.max(countriesGDPArr, function (d) {
-        return d;
-    })]).range([10, 40]);
-
-    // setup axes 
-    // horizontal axis is education 
-    // let xAxis = d3.axis
-    //     .scale(xScale)
-    //     .orient('bottom');
-
-    // vertical axis is population 
-
-
-    //dataset = [population, betterLife, health, education]
-    // append circles to svg 
-
-    var edCircles = svg.selectAll("circle").data(education).enter().append("circle");
-
-    edCircles.attr("cx", function (d, i, nodes) {
-        return xScale(d);
-    }).attr("cy", function (d, i, nodes) {
-        return yScale(countriesPop[countriesEd[i]]);
-    }).attr("r", function (d, i) {
-        return rScale(countriesGDPArr[i]);
-    }).attr("fill", function (d) {
-        var rand = Math.round(d * 30).toString();
-        return "rgb(100, 0, " + rand + ")";
-    });
-
-    // append text to svg 
-
-    var edText = svg.selectAll("text").data(countriesEd).enter().append("text");
-
-    edText.text(function (d) {
-        return d;
-    }).attr("x", function (d, i) {
-        return xScale(education[i]);
-    }).attr("y", function (d, i) {
-        return yScale(countriesPop[countriesEd[i]]);
-    });
-
-    // append x-axis to svg 
-    svg.append("g").attr("class", "axis").call(d3.axisBottom(xScale)).attr("transform", "translate(0," + (h - yPadding) + ")");
-
-    svg.append("text").attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
-    .attr("transform", "translate(" + w / 2 + "," + h + ")") // text is drawn off the screen top left, move down and out and rotate
-    .text("Education Spending(%GDP)");
-
-    // append y-axis to svg
-    svg.append("g").attr("class", "axis").attr("transform", "translate(" + xPadding + ",0)").call(d3.axisLeft(yScale));
-
-    svg.append("text").attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
-    .attr("transform", "translate(" + yPadding / 2 + "," + h / 2 + ")rotate(-90)") // text is drawn off the screen top left, move down and out and rotate
-    .text("Population(millions)");
-};
-
-exports.default = Display;
+(0, _graph.initializeGraph)();
 
 /***/ }),
 /* 172 */
@@ -23190,198 +23064,300 @@ var GDP = ["AUS", "GDP", "TOT", "MLN_USD", "A", "2016", 1197069.9335, "AUT", "GD
 exports.default = GDP;
 
 /***/ }),
-/* 468 */
+/* 468 */,
+/* 469 */,
+/* 470 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {/* The MIT License (MIT)
+"use strict";
 
-Copyright (c) 2011-2012 George "Gary" Katsevman
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.countriesEd = exports.education = exports.countriesHealth = exports.health = exports.countriesBetter = exports.betterLife = exports.countriesGDPArr = exports.countriesGDP = exports.countriesPopArr = exports.countriesPop = undefined;
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+var _d = __webpack_require__(172);
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE S
-OFTWARE.
-*/
+var d3 = _interopRequireWildcard(_d);
 
-var Set = function () {
+var _better_life = __webpack_require__(463);
 
-var value = true
-  , jsonify = function (item) {
-     if (typeof item === "object") {
-       return item = JSON.stringify(item)
-     }
-     return item;
-  }
-  , unique = function(iset){
-      var set = Object.create(null)
-        , i = 0
-        , l = iset.length
+var _better_life2 = _interopRequireDefault(_better_life);
 
-      for(; i < l; i++) {
-        set[jsonify(iset[i])] = value
-      }
+var _health_spending = __webpack_require__(464);
 
-      return set
-  }
+var _health_spending2 = _interopRequireDefault(_health_spending);
 
-var Set = function(input){
-  this._set = unique(input || [])
+var _education = __webpack_require__(465);
+
+var _education2 = _interopRequireDefault(_education);
+
+var _population = __webpack_require__(466);
+
+var _population2 = _interopRequireDefault(_population);
+
+var _GDP = __webpack_require__(467);
+
+var _GDP2 = _interopRequireDefault(_GDP);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+// Population data 
+var dataset = [];
+
+var string4 = _population2.default.join(",");
+var array4 = d3.csvParse(string4).columns;
+
+var countriesPop = exports.countriesPop = {};
+var countriesPopArr = exports.countriesPopArr = [];
+
+for (var i = 0; i < array4.length; i = i + 7) {
+    countriesPop[array4[i]] = array4[i + 6];
+    countriesPopArr.push(parseFloat(array4[i + 6]));
 }
 
-Set.prototype.contains = function(prop){
-  return !!this._set[jsonify(prop)]
-}
+countriesPopArr.sort(function (a, b) {
+    return a - b;
+});
+dataset.push(countriesPopArr);
 
-Set.prototype.empty = function(){
-  return Object.keys(this._set).length == 0
-}
+// GDP data
 
-Set.prototype.size = function(){
-  return Object.keys(this._set).length
-}
+var string5 = _GDP2.default.join(",");
+var array5 = d3.csvParse(string5).columns;
 
-Set.prototype.get = function(){
-  return Object.keys(this._set)
-}
+var countriesGDP = exports.countriesGDP = {};
+var countriesGDPArr = exports.countriesGDPArr = [];
 
-Set.prototype.add = function(prop){
-  this._set[jsonify(prop)] = value
-}
-
-Set.prototype.remove = function(prop){
-  delete this._set[jsonify(prop)]
-}
-
-Set.prototype.union = function(iset){
-  return new Set(this.get().concat(iset.get()))
-}
-
-
-Set.prototype.intersect = function(iset){
-  var items = iset.get()
-    , i = 0
-    , l = items.length
-    , oset = new Set()
-    , prop
-
-  for(; i < l; i++){
-    prop = items[i]
-    if(this.contains(prop)){
-      oset.add(prop)
+for (var _i = 0; _i < array5.length; _i = _i + 7) {
+    if (countriesPop[array5[_i]]) {
+        countriesGDP[array5[_i]] = array5[_i + 6];
+        countriesGDPArr.push(parseFloat(array5[_i + 6]));
     }
-  }
+}
 
-  items = this.get()
+// Better Life data 
 
-  for(i = 0, l = items.length; i < l; i++){
-    prop = items[i]
-    if(iset.contains(prop)){
-      oset.add(prop)
+var string = _better_life2.default.join(",");
+var array = d3.csvParse(string).columns;
+
+var betterLife = exports.betterLife = [];
+var countriesBetter = exports.countriesBetter = [];
+var countries = {};
+for (var _i2 = 0; _i2 < array.length; _i2 = _i2 + 7) {
+    if (countriesPop[array[_i2]] && countries[array[_i2]] === undefined) {
+        countries[array[_i2]] = 1;
+        countriesBetter.push(array[_i2]);
+        betterLife.push(parseFloat(array[_i2 + 6]));
     }
-  }
-
-  return oset
 }
 
-Set.prototype.difference = function(iset){
-  var items = iset.get()
-    , i = 0
-    , l = items.length
-    , oset = this.union(iset)
-    , prop
+countriesBetter.reverse().filter(function (e, i, arr) {
+    return arr.indexOf(e, i + 1) === -1;
+}).reverse();
 
-  for(; i < l; i++){
-    prop = items[i]
-    if(this.contains(prop)){
-      oset.remove(prop)
+dataset.push(betterLife);
+
+// Health data
+
+
+var string2 = _health_spending2.default.join(",");
+var array2 = d3.csvParse(string2).columns;
+
+var health = exports.health = [];
+var countriesHealth = exports.countriesHealth = [];
+countries = {};
+
+for (var _i3 = 0; _i3 < array2.length; _i3 = _i3 + 7) {
+    if (countriesPop[array2[_i3]] && countries[array2[_i3]] === undefined) {
+        countries[array2[_i3]] = 1;
+        countriesHealth.push(array2[_i3]);
+        health.push(parseFloat(array2[_i3 + 6]));
     }
-  }
-
-  return oset
 }
 
-Set.prototype.subset = function(iset){
-  var items = iset.get()
-    , subset = false
-    , i = 0
-    , l = items.length
+countriesHealth.reverse().filter(function (e, i, arr) {
+    return arr.indexOf(e, i + 1) === -1;
+}).reverse();
 
-  for(; i < l; i++){
-    prop = items[i]
-    if(this.contains(prop)){
-      subset = true
+dataset.push(health);
+var string3 = _education2.default.join(",");
+var array3 = d3.csvParse(string3).columns;
+
+// Education data 
+
+var education = exports.education = [];
+var countriesEd = exports.countriesEd = [];
+countries = {};
+
+for (var _i4 = 0; _i4 < array3.length; _i4 = _i4 + 7) {
+    if (countriesPop[array3[_i4]] && countries[array3[_i4]] === undefined) {
+        countries[array3[_i4]] = 1;
+        countriesEd.push(array3[_i4]);
+        education.push(parseFloat(array3[_i4 + 6]));
     }
-    else{
-      subset = false
-      break
-    }
-  }
-
-  return subset
 }
 
-Set.prototype.find = function(pred){
-  return this.get().filter(pred)
-}
+countriesEd.reverse().filter(function (e, i, arr) {
+    return arr.indexOf(e, i + 1) === -1;
+}).reverse();
 
-Set.prototype.clear = function(){
-  this._set = Object.create(null)
-}
-
-Set.unique = function(iset){
-  return Object.keys(unique(iset))
-}
-
-return Set
-
-}()
-
-if(typeof module === 'object' && module.hasOwnProperty('exports')){
-  module.exports = Set;
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(469)(module)))
+dataset.push(education);
 
 /***/ }),
-/* 469 */
-/***/ (function(module, exports) {
+/* 471 */
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _d = __webpack_require__(172);
+
+var d3 = _interopRequireWildcard(_d);
+
+var _data = __webpack_require__(470);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var Display = function Display(input) {
+    d3.select("svg").remove();
+    var dataset = void 0;
+    var countries = void 0;
+
+    switch (input) {
+        case "quality":
+            dataset = _data.betterLife;
+            countries = _data.countriesBetter;
+            break;
+        case "health":
+            dataset = _data.health;
+            countries = _data.countriesHealth;
+            break;
+        case "education":
+            dataset = _data.education;
+            countries = _data.countriesEd;
+            break;
+
+    }
+
+    document.getElementById("quality").addEventListener("click", function () {
+        return Display("quality");
+    });
+    document.getElementById("health").addEventListener("click", function () {
+        return Display("health");
+    });
+    document.getElementById("education").addEventListener("click", function () {
+        return Display("education");
+    });
+
+    var svg = d3.select("body").append("svg").attr("width", 1400).attr("height", 700);
+
+    var w = 1400;
+    var h = 700;
+    var xPadding = 60;
+    var yPadding = 30;
+
+    // setting up xScale, yScale, and rScale 
+    // horizontal scale 
+
+    var xScale = d3.scaleLinear().domain([d3.min(dataset, function (d) {
+        return d;
+    }) * 0.9, d3.max(dataset, function (d) {
+        return d;
+    }) * 1.1]).range([xPadding, w - xPadding]);
+
+    // vertical scale 
+    var yScale = d3.scaleLinear().domain([d3.min(_data.countriesPopArr, function (d) {
+        return d;
+    }) * 0.7, d3.max(_data.countriesPopArr, function (d) {
+        return d;
+    }) * 1.1]).range([h - yPadding, yPadding]);
+
+    // radius scale 
+
+    var rScale = d3.scaleLinear().domain([d3.min(_data.countriesGDPArr, function (d) {
+        return d;
+    }), d3.max(_data.countriesGDPArr, function (d) {
+        return d;
+    })]).range([10, 40]);
+
+    //dataset = [population, betterLife, health, education]
+    // append circles to svg 
+
+
+    var Circles = svg.selectAll("circle").data(dataset).enter().append("circle").transition().duration(1000) // this is 1s
+    .delay(100);
+
+    Circles.attr("cx", function (d, i, nodes) {
+        return xScale(d);
+    }).attr("cy", function (d, i, nodes) {
+        return yScale(_data.countriesPop[countries[i]]);
+    }).attr("r", function (d, i) {
+        return rScale(_data.countriesGDPArr[i]);
+    }).attr("fill", function (d) {
+        var rand = Math.round(d * 30).toString();
+        return "rgb(100, 0, " + rand + ")";
+    }).transition().duration(1000) // this is 1s
+    .delay(300);
+
+    // append text to svg 
+
+    var Text = svg.selectAll("text").data(countries).enter().append("text").transition().duration(1000) // this is 1s
+    .delay(100);
+
+    Text.text(function (d) {
+        return d;
+    }).attr("x", function (d, i) {
+        return xScale(dataset[i]);
+    }).attr("y", function (d, i) {
+        return yScale(_data.countriesPop[countries[i]]);
+    });
+
+    // append x-axis to svg 
+    svg.append("g").attr("class", "axis").call(d3.axisBottom(xScale)).attr("transform", "translate(0," + (h - yPadding) + ")");
+
+    svg.append("text").attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr("transform", "translate(" + w / 2 + "," + h + ")") // text is drawn off the screen top left, move down and out and rotate
+    .text("Education Spending(%GDP)");
+
+    // append y-axis to svg
+    svg.append("g").attr("class", "axis").attr("transform", "translate(" + xPadding + ",0)").call(d3.axisLeft(yScale));
+
+    svg.append("text").attr("text-anchor", "middle") // this makes it easy to centre the text as the transform is applied to the anchor
+    .attr("transform", "translate(" + xPadding / 2 + "," + h / 2 + ")rotate(-90)") // text is drawn off the screen top left, move down and out and rotate
+    .text("Population(millions)");
 };
 
+exports.default = Display;
+
+/***/ }),
+/* 472 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.initializeGraph = undefined;
+
+var _display = __webpack_require__(471);
+
+var _display2 = _interopRequireDefault(_display);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var initializeGraph = exports.initializeGraph = function initializeGraph() {
+    (0, _display2.default)("health");
+};
 
 /***/ })
 /******/ ]);
